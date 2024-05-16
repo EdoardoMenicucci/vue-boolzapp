@@ -1,0 +1,280 @@
+/* Reset */
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: sans-serif;
+    color: black;
+}
+
+/* Reset Button */
+
+button {
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    border: none;
+    padding: 1rem;
+    border-radius: 15px;
+}
+
+/* Common */
+
+.flex {
+    display: flex;
+}
+
+.flex-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.flex-center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.flex-center-left {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.flex-no-center {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.flex-columns {
+    display: flex;
+    flex-direction: column;
+}
+
+
+.text-center {
+    text-align: center;
+}
+
+.content-padding {
+    padding: 1rem;
+}
+
+.margin {
+    margin: 3vh 0;
+}
+
+.container {
+    width: 1150px;
+    margin: 0 auto;
+}
+
+.gold {
+    background-color: rgb(235, 235, 235);
+}
+
+img {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    border-radius: 50%;
+}
+
+
+/* Main */
+
+.background {
+    width: 100%;
+    height: 100vh;
+    background: rgb(217, 219, 213);
+    background: linear-gradient(0deg, rgba(217, 219, 213, 1) 75%, rgba(0, 150, 136, 1) 75%);
+    display: flex;
+    align-items: center;
+}
+
+#app {
+    width: 1320px;
+    height: calc(100% - 6rem);
+    margin: 0 auto;
+    background-color: blue;
+    display: flex;
+}
+
+.left-column {
+    width: 40%;
+    height: 100%;
+    background-color: #eaeaea;
+    display: flex;
+    flex-direction: column;
+}
+
+.right-column {
+    width: 70%;
+    height: 100%;
+    background-color: #eaeaea;
+    display: flex;
+    flex-direction: column;
+}
+
+.top-row {
+    height: 4rem;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.left-notify {
+    height: 5rem;
+    width: 100%;
+    background-color: #8edafc;
+}
+
+.left-searchbar {
+    height: 3rem;
+    width: 100%;
+}
+
+.left-user {
+    height: calc(100% - 12rem);
+    width: 100%;
+    overflow: auto;
+}
+
+/* COLONNA CHAT */
+.chat-column {
+    width: 100%;
+    height: calc(100% - 8rem);
+    overflow: auto;
+    padding: 2rem;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+    background-image: url(../img/img-background.png);
+}
+
+/* Search bar in basso */
+
+.right-writebar {
+    width: 100%;
+    height: 4rem;
+    background-color: #e1dfd8;
+}
+
+/* Immagine utente */
+.user-image {
+    height: 3rem;
+    width: 3rem;
+    border-radius: 50%;
+    background-color: white;
+}
+
+/* user image bigger */
+
+.user-image-big {
+    height: 4rem;
+    width: 4rem;
+    border-radius: 50%;
+    background-color: white;
+}
+
+/* Icone top-bar */
+
+.top-row i {
+    font-size: 1.4rem;
+    padding: 0.2rem;
+    color: #b0b0b0;
+}
+
+/* icona search bar sinistra */
+
+.input-group i {
+    color: #b0b0b0;
+}
+
+/* Icona campanella bianca */
+
+.left-notify i {
+    color: white;
+}
+
+/* Icona bar scrittura */
+
+.right-writebar i {
+    color: #868686;
+}
+
+/* CARD UTENTE */
+
+.card-utente {
+    height: 5rem;
+    width: 100%;
+    background-color: rgb(238, 238, 238);
+    border: 1px solid black;
+}
+
+.time-msg {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    font-size: 12px;
+    font-weight: 750;
+    color: #b0b0b0;
+}
+
+/* Font size e weight nomi */
+.nome {
+    font-weight: 600;
+}
+
+/* Font size e color last msg */
+.last-msg {
+    font-size: 13px;
+    color: rgb(177, 177, 177);
+    font-weight: 600;
+}
+
+/* Messaggi chat */
+
+.send {
+    width: 100%;
+    background-color: #d5f9ba;
+    padding: 1rem;
+    border-radius: 13px;
+    color: black;
+}
+
+.recive {
+    width: 100%;
+    background-color: white;
+    padding: 1rem;
+    border-radius: 13px;
+    color: black;
+}
+
+/* Messaggi ritorno */
+.left-chat-column {
+    width: 45%;
+    margin: 0.8rem 0;
+}
+
+/* Messaggi scritti */
+.right-chat-column {
+    width: 45%;
+    margin: 0.8rem 0;
+    align-self: flex-end;
+}
+
+/* Border */
+
+.right-border {
+    border-left: 1px solid #bbbbbb;
+}
+
+a {
+    color: #659fba;
+}
