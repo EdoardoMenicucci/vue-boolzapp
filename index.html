@@ -28,7 +28,7 @@
                     <!-- img user -->
                     <div class="d-flex flex-center">
                         <div class="user-image">
-                            <img src="./img/1.jpg" alt="">
+                            <img src="./img/0.jpg" alt="">
                         </div>
                         <!-- nome user -->
                         <div class="ps-2 nome">
@@ -71,30 +71,15 @@
                 <!-- SEZIONE CARD UTENTI GENERATI CON VUE JS -->
                 <div class="left-user flex-columns">
                     <!-- CARD UTENTE -->
-                    <div class="card-utente position-relative p-2 d-flex">
+                    <div class="card-utente position-relative p-2 d-flex" v-for="contatto , i in contacts"
+                        @click="clickOnContact(contacts[i] , i, contacts)" :class="{ grey: contatto.visible}">
                         <!-- IMMAGINE UTENTE -->
                         <div class="user-image-big">
-                            <img src="./img/0.jpg" alt="">
+                            <img :src="contatto.avatar" alt="">
                         </div>
                         <div class="flex-columns ps-2">
                             <!-- Nome utente -->
-                            <div class="nome">Franco</div>
-                            <div class="last-msg">ultimo messaggio inviato</div>
-                        </div>
-                        <!-- POSITION ABSOLUTE PER ORARIO -->
-                        <div class="time-msg">
-                            12:10
-                        </div>
-                    </div>
-                    <!-- CARD UTENTE -->
-                    <div class="card-utente position-relative p-2 d-flex">
-                        <!-- IMMAGINE UTENTE -->
-                        <div class="user-image-big">
-                            <img src="./img/2.jpg" alt="">
-                        </div>
-                        <div class="flex-columns ps-2">
-                            <!-- Nome utente -->
-                            <div class="nome">Paolo</div>
+                            <div class="nome">{{contatto.name}}</div>
                             <div class="last-msg">ultimo messaggio inviato</div>
                         </div>
                         <!-- POSITION ABSOLUTE PER ORARIO -->
@@ -104,6 +89,8 @@
                     </div>
                 </div>
             </div>
+
+
             <!-- COLONNA DI DESTRA -->
             <div class="right-column">
                 <div class="top-row content-padding right-border">
@@ -115,9 +102,10 @@
                         <!-- nome right user -->
                         <div class="flex-columns ps-2">
                             <div class=" nome">
-                                Mario
+                                {{contacts[clickedContact].name}}
                             </div>
-                            <div class="last-msg">Ultimo accesso oggi alle 12:00</div>
+                            <div class="last-msg">Ultimo accesso {{messageSplitted[0]}} alle {{messageSplitted[1]}}
+                            </div>
                         </div>
                     </div>
                     <!-- Icone a sinistra -->
@@ -128,14 +116,21 @@
                     </div>
                 </div>
                 <!-- COLONNA CHAT INVIO VERDE RICEVUTA ROSSA -->
-                <div class="chat-column blue">
+                <div class="chat-column">
                     <!-- SEZIONI MESSAGGI MANDATI -->
                     <div class="left-chat-column">
-                        <div class="recive">Ciao sono edoardo!</div>
+                        <!-- PRIMA V-FOR -->
+                        <template v-for="elemento , i in msgClickedContact">
+                            <div class="recive position-relative" v-if="elemento.status == 'sent'">{{elemento.message}}
+                                <span class="time-bottom">{{elemento.date}}</span>
+                            </div>
                     </div>
                     <!-- SEZIONE MESSAGGI RICEVUTI -->
                     <div class="right-chat-column">
-                        <div class="send">Ciao sono edoardo!</div>
+                        <div class="send position-relative" v-if="elemento.status == 'received'">
+                            {{elemento.message}}<span class="time-bottom">{{elemento.date}}</span>
+                        </div>
+                        </template>
                     </div>
                 </div>
                 <!-- BOTTOM MSG BAR -->

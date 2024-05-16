@@ -214,12 +214,21 @@ img {
     height: 5rem;
     width: 100%;
     background-color: rgb(238, 238, 238);
-    border: 1px solid black;
 }
 
+/* Stile messaggi */
 .time-msg {
     position: absolute;
     top: 5px;
+    right: 5px;
+    font-size: 12px;
+    font-weight: 750;
+    color: #b0b0b0;
+}
+
+.time-bottom {
+    position: absolute;
+    bottom: 5px;
     right: 5px;
     font-size: 12px;
     font-weight: 750;
@@ -264,9 +273,8 @@ img {
 
 /* Messaggi scritti */
 .right-chat-column {
-    width: 45%;
-    margin: 0.8rem 0;
-    align-self: flex-end;
+    width: 100%;
+    margin: 0.8rem 125%;
 }
 
 /* Border */
@@ -277,4 +285,10 @@ img {
 
 a {
     color: #659fba;
+}
+
+/* highlight */
+
+.grey {
+    background-color: #8d8d8d;
 }
