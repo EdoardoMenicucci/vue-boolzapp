@@ -198,6 +198,7 @@ createApp({
         clickOnContact(contatto, i, contacts) {
             // SALVO NEI DATA IL NUMERO DEL CONTATTO CLICCATO
             this.clickedContact = i
+            console.log(contatto.messages[0].date);
             // TOLGO LA VISIBILITA AD OGNI CLICK SU TUTTI I CONTATTI
             for (let i = 0; i < contacts.length; i++) {
                 const element = contacts[i];
@@ -263,7 +264,7 @@ createApp({
         },
         // INVIO DEI MESSAGGI NELLE CHAT
         sendMsg() {
-            this.getCurrentTime();
+            // this.getCurrentTime();
             // SALVO AL PRESS INVIO IL V-MODEL IN UNA VARIABILE STABILE PER POTER ELIMINARE
             this.userMsgStable = this.userMsg
             // SVUOTO IL V-MODEL INPUT UTENTE
@@ -273,7 +274,7 @@ createApp({
             let selectedContact = this.contacts[this.clickedContact].messages;
             console.log(selectedContact);
             selectedContact.push({
-                date: '10/01/2020' + this.time,
+                date: '10/01/2020 15:51:00',
                 message: this.userMsgStable,
                 status: 'received'
             })
@@ -286,10 +287,10 @@ createApp({
 
         randomResponse() {
             setTimeout(() => {
-                this.getCurrentTime();
+                // this.getCurrentTime();
                 this.contacts[this.clickedContact].messages.push({
-                    date: `10/05/2023` + this.time,
-                    message: 'A TESTA DI CAZZO',
+                    date: `10/05/2023 15:51:00`,
+                    message: 'versione stabile',
                     status: 'sent'
                 })
                 this.LastRecivedMsgs[this.clickedContact] = this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].message;
@@ -303,7 +304,7 @@ createApp({
             let hour = d.getHours();
             let minutes = d.getMinutes();
             let seconds = d.getSeconds();
-            console.log(hour, minutes, seconds);
+            // console.log(hour, minutes, seconds);
             this.time = hour + ':' + minutes + ':' + seconds
             console.log(this.time);
         },
@@ -315,7 +316,7 @@ createApp({
         this.msgClickedContact = this.contacts[this.clickedContact].messages;
         this.separationDateMsg();
         this.lastMsgAtLoading();
-        this.getCurrentTime();
+        // this.getCurrentTime();
 
 
 
