@@ -183,6 +183,10 @@ createApp({
             LastRecivedMsgs: [],
             // TUTTE LE DATE DEI MESSAGGI DEGLI ULTIMI UTENTI
             lastDataStart: [],
+            // V-MODEL USER MSG (ATTENZIONE PROXY)
+            userMsg: '',
+            // USER MSG DA STAMPARE (CHE NON SI AGGIORNA AD OGNI CAMBIO DI CARATTERE)
+            userMsgStable: '',
         }
     },
     methods: {
@@ -208,20 +212,24 @@ createApp({
             for (let i = 0; i < this.msgClickedContact.length; i++) {
                 const element = this.msgClickedContact[i];
                 // console.log(element);
+                // DIVIDO LA DATA DALL' ORARIO
+                this.dateSplitted = element.date.split(' ');
+                //DIVIDO L'ORARIO ORA MINUTI SECONDI CREANDO UN ARRAY
+                let secondsMinutesHours = this.dateSplitted[1].split(':')
+                //MOSTRO SOLTANTO MINUTI E ORE 
+                let minuteHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1]
+                // console.log(minuteHours);
+                // RICAVO L'ULTIMO MESSAGGIO E L'ULTIMA DATA DA OGNI CONTATTO
                 if (element.status == 'sent') {
-                    this.lastDate = element.date
+                    this.lastDate = minuteHours
                     this.LastRevicedMsg = element.message
                 };
-                this.dateSplitted = this.lastDate.split(' ');
-                let secondsMinutesHours = this.dateSplitted[1].split(':')
-                console.log(secondsMinutesHours);
-                let minuteHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1]
-                console.log(minuteHours);
+
             };
-            // console.log(this.lastDate);
+            console.log(this.lastDate);
             console.log(this.dateSplitted);
-            // console.log(this.LastRevicedMsg);
-            // console.log(this.element);
+            console.log(this.LastRevicedMsg);
+            // this.lastMsgAtLoading();
         },
         // FUNZIONE CHE AL CARICAMENTO DELLA PAGINA CARICO TUTTE LE ORE E ULTIMI MSG RICEVUTI
         lastMsgAtLoading() {
@@ -245,9 +253,42 @@ createApp({
                 let dataOnlyMinutHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1];
                 // PUSHO IL DATO IN UNA VARIABILE NEI DATA DI VUEJS
                 this.lastDataStart.push(dataOnlyMinutHours)
+                // console.log(this.lastDataStart);
             }
         },
+        // INVIO DEI MESSAGGI NELLE CHAT
+        sendMsg() {
+            // SALVO AL PRESS INVIO IL V-MODEL IN UNA VARIABILE STABILE PER POTER ELIMINARE
+            this.userMsgStable = this.userMsg
+            // SVUOTO IL V-MODEL INPUT UTENTE
+            this.userMsg = ''
+            console.log(this.userMsgStable);
+            //SALVO IN UNA VARIABILE 
+            let selectedContact = this.contacts[this.clickedContact].messages;
+            console.log(selectedContact);
+            selectedContact.push({
+                date: '10/05/2023 15:45:55',
+                message: this.userMsgStable,
+                status: 'received'
+            })
+            this.LastRecivedMsgs[this.clickedContact] = this.userMsgStable;
+            this.randomResponse();
+        },
 
+        // FUNZIONE RISPOSTA RANDOM
+
+        randomResponse() {
+            setTimeout(() => {
+                this.contacts[this.clickedContact].messages.push({
+                    date: '10/05/2023 15:45:55',
+                    message: 'QUALCOSA A CASO',
+                    status: 'sent'
+                })
+                this.LastRecivedMsgs[this.clickedContact] = this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].message;
+
+            }, 10000);
+        },
+        // BONUS OTTENGO L'ORA ATTUALE
 
     },
     mounted() {

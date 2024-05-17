@@ -105,7 +105,7 @@
                             <div class=" nome">
                                 {{contacts[clickedContact].name}}
                             </div>
-                            <div class="last-msg">Ultimo accesso {{dateSplitted[0]}} alle {{dateSplitted[1]}}
+                            <div class="last-msg">Ultimo accesso {{dateSplitted[0]}} alle {{lastDate}}
                             </div>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
                     <i class="fa-regular fa-face-smile fa-2x pe-2"></i>
                     <div class="input-group d-flex ">
                         <input type="text" class="form-control" placeholder="Scrivi un messaggio" aria-label="msg"
-                            aria-describedby="basic-addon1">
+                            aria-describedby="basic-addon1" v-model="userMsg" @keyup.enter="sendMsg()">
                     </div>
                     <i class="fa-solid fa-microphone fa-2x ps-2"></i>
                 </div>
