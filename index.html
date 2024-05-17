@@ -80,11 +80,12 @@
                         <div class="flex-columns ps-2">
                             <!-- Nome utente -->
                             <div class="nome">{{contatto.name}}</div>
-                            <div class="last-msg">ultimo messaggio inviato</div>
+                            <div class=" last-msg">{{LastRecivedMsgs[i]}}
+                            </div>
                         </div>
                         <!-- POSITION ABSOLUTE PER ORARIO -->
                         <div class="time-msg">
-                            12:10
+                            {{lastDataStart[i]}}
                         </div>
                     </div>
                 </div>
@@ -97,14 +98,14 @@
                     <!-- img right user -->
                     <div class="d-flex flex-center">
                         <div class="user-image">
-                            <img src="./img/4.jpg" alt="">
+                            <img :src="contacts[clickedContact].avatar" alt="">
                         </div>
                         <!-- nome right user -->
                         <div class="flex-columns ps-2">
                             <div class=" nome">
                                 {{contacts[clickedContact].name}}
                             </div>
-                            <div class="last-msg">Ultimo accesso {{messageSplitted[0]}} alle {{messageSplitted[1]}}
+                            <div class="last-msg">Ultimo accesso {{dateSplitted[0]}} alle {{dateSplitted[1]}}
                             </div>
                         </div>
                     </div>
@@ -115,20 +116,20 @@
                         <i class="fa-solid fa-ellipsis-vertical"></i>
                     </div>
                 </div>
-                <!-- COLONNA CHAT INVIO VERDE RICEVUTA ROSSA -->
+                <!-- COLONNA CHAT INVIO VERDE; RICEVUTA ROSSA -->
                 <div class="chat-column">
                     <!-- SEZIONI MESSAGGI MANDATI -->
                     <div class="left-chat-column">
                         <!-- PRIMA V-FOR -->
                         <template v-for="elemento , i in msgClickedContact">
                             <div class="recive position-relative" v-if="elemento.status == 'sent'">{{elemento.message}}
-                                <span class="time-bottom">{{elemento.date}}</span>
+                                <span class="time-bottom">{{elemento.date.split(' ')[1]}}</span>
                             </div>
                     </div>
                     <!-- SEZIONE MESSAGGI RICEVUTI -->
                     <div class="right-chat-column">
                         <div class="send position-relative" v-if="elemento.status == 'received'">
-                            {{elemento.message}}<span class="time-bottom">{{elemento.date}}</span>
+                            {{elemento.message}}<span class="time-bottom">{{elemento.date.split(' ')[1]}}</span>
                         </div>
                         </template>
                     </div>

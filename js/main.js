@@ -174,44 +174,77 @@ createApp({
             clickedContact: 0,
             // CREO UN ARRAY DI OGGETTI CONTENENTI MESSAGGI DATA E STATO
             msgClickedContact: [],
-            // DIVIDO LA DATA
-            clickedData: [],
+            // DIVIDO LA DATA DALL'ARRAY DI OGGETTI DI MESSAGGI
             // VARIABILE APPOGGIO ULTIMO MESSAGGIO DATA E ORA
-            lastMessage: '',
-            // DIVIDO DATA DA ORA
-            messageSplitted: '',
+            lastDate: '', //STRINGA DI DATA E ORA ULTIMO MESSAGGIO RICEVUTO
+            // DIVIDO CON SPLIT LA DATA (TARSFORMO LA STRINGA IN UN ARRAY DI 2 ELEMENTI)
+            dateSplitted: [], //ARRAY IN POSIZIONE 0 GIORNO/ANNO; IN POSIZIONE 1 MINUTI/ORA;
+            //ULTIMI MESSAGGI INVIATI DAGLI UTENTI ARRAY
+            LastRecivedMsgs: [],
+            // TUTTE LE DATE DEI MESSAGGI DEGLI ULTIMI UTENTI
+            lastDataStart: [],
         }
     },
     methods: {
         // Click al contatto ricavo il numero array e oggetto
         clickOnContact(contatto, i, contacts) {
-            // console.log('contatto cliccato', contatto);
-            // console.log(contacts);
-            // console.log('numero contatto', i);
+            // SALVO NEI DATA IL NUMERO DEL CONTATTO CLICCATO
             this.clickedContact = i
             // TOLGO LA VISIBILITA AD OGNI CLICK SU TUTTI I CONTATTI
             for (let i = 0; i < contacts.length; i++) {
                 const element = contacts[i];
                 element.visible = false
             }
+            // SOLO IL CONTATTO CLICCATO DIVENTA VISIBLE (CLASS GREY E MESSAGGI)
             contatto.visible = true
             // SALVO IN UNA VARIABILE I MESSAGGI DEL CONTATTO CLICCATO
             this.msgClickedContact = contatto.messages
-            // console.log(this.msgClickedContact);
-            this.separationDate();
+            //RICHIAMO LA FUNZIONE CHE LAVORA OGNI OGGETTO MESSAGES NELL ARRAY
+            this.separationDateMsg();
         },
-        // Separo la data dai messagi e stati//
-        separationDate() {
+        // Separo la data dai messagi e stati solo per la sezione messaggi visibili//
+        separationDateMsg() {
             // PUSHO IN UN ARRAY STATI E DATA
             for (let i = 0; i < this.msgClickedContact.length; i++) {
                 const element = this.msgClickedContact[i];
                 // console.log(element);
                 if (element.status == 'sent') {
-                    this.lastMessage = element.date
-                }
-                console.log(this.lastMessage);
-                this.messageSplitted = this.lastMessage.split(' ');
-                console.log(this.messageSplitted);
+                    this.lastDate = element.date
+                    this.LastRevicedMsg = element.message
+                };
+                this.dateSplitted = this.lastDate.split(' ');
+                let secondsMinutesHours = this.dateSplitted[1].split(':')
+                console.log(secondsMinutesHours);
+                let minuteHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1]
+                console.log(minuteHours);
+            };
+            // console.log(this.lastDate);
+            console.log(this.dateSplitted);
+            // console.log(this.LastRevicedMsg);
+            // console.log(this.element);
+        },
+        // FUNZIONE CHE AL CARICAMENTO DELLA PAGINA CARICO TUTTE LE ORE E ULTIMI MSG RICEVUTI
+        lastMsgAtLoading() {
+            // CICLO FOR PER TUTTI I CONTATTI/ UPDATE DATA E ORA E TUTTI GLI ULTIMI MESSAGGI
+            for (let i = 0; i < this.contacts.length; i++) {
+                const element = this.contacts[i];
+                // console.log(element);
+                element.messages
+                // console.log(element.messages);
+                // PRENDO L'ULTIMO MESSAGGIO PER OGNI CHAT
+                let lastMessage = element.messages[(element.messages.length - 1)].message
+                //PUSHO IN UN ARRAY NEI DATA TUTTI GLI ULTIMI MESSAGGI
+                this.LastRecivedMsgs.push(lastMessage);
+                // PRENDO L'ULTIMA DATA DI OGNI CONVERSAZIONE
+                let lastData = element.messages[(element.messages.length - 1)].date
+                // DIVIDO LA DATA E L'ORARIO DALLO SPAZIO CREANDO UN ARRAY
+                let dateSplit = lastData.split(' ')
+                //DIVIDO L'ORARIO ORA MINUTI SECONDI
+                let secondsMinutesHours = dateSplit[1].split(':');
+                //CREO UNA VARIABILE CON SOLTANTO LE ORE E I MINUTI
+                let dataOnlyMinutHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1];
+                // PUSHO IL DATO IN UNA VARIABILE NEI DATA DI VUEJS
+                this.lastDataStart.push(dataOnlyMinutHours)
             }
         },
 
@@ -220,7 +253,9 @@ createApp({
     mounted() {
         console.log('app vue montanta correttamente')
         this.msgClickedContact = this.contacts[this.clickedContact].messages;
-        this.separationDate();
+        this.separationDateMsg();
+        this.lastMsgAtLoading();
+
 
     }
 },
