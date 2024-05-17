@@ -183,10 +183,14 @@ createApp({
             LastRecivedMsgs: [],
             // TUTTE LE DATE DEI MESSAGGI DEGLI ULTIMI UTENTI
             lastDataStart: [],
+            // ORA MINUTI
+            minuteHour: '',
             // V-MODEL USER MSG (ATTENZIONE PROXY)
             userMsg: '',
             // USER MSG DA STAMPARE (CHE NON SI AGGIORNA AD OGNI CAMBIO DI CARATTERE)
             userMsgStable: '',
+            // BONUS CREO IL TEMPO REALE DA INSERIRE QUANDO MANDO UN MSG
+            time: '',
         }
     },
     methods: {
@@ -204,20 +208,21 @@ createApp({
             // SALVO IN UNA VARIABILE I MESSAGGI DEL CONTATTO CLICCATO
             this.msgClickedContact = contatto.messages
             //RICHIAMO LA FUNZIONE CHE LAVORA OGNI OGGETTO MESSAGES NELL ARRAY
-            this.separationDateMsg();
+            this.separationDateMsg(contatto, i, contacts);
         },
         // Separo la data dai messagi e stati solo per la sezione messaggi visibili//
-        separationDateMsg() {
+        separationDateMsg(contatto, i, contacts) {
             // PUSHO IN UN ARRAY STATI E DATA
             for (let i = 0; i < this.msgClickedContact.length; i++) {
                 const element = this.msgClickedContact[i];
-                // console.log(element);
+                console.log();
                 // DIVIDO LA DATA DALL' ORARIO
                 this.dateSplitted = element.date.split(' ');
                 //DIVIDO L'ORARIO ORA MINUTI SECONDI CREANDO UN ARRAY
                 let secondsMinutesHours = this.dateSplitted[1].split(':')
                 //MOSTRO SOLTANTO MINUTI E ORE 
                 let minuteHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1]
+                this.minuteHour = minuteHours;
                 // console.log(minuteHours);
                 // RICAVO L'ULTIMO MESSAGGIO E L'ULTIMA DATA DA OGNI CONTATTO
                 if (element.status == 'sent') {
@@ -258,6 +263,7 @@ createApp({
         },
         // INVIO DEI MESSAGGI NELLE CHAT
         sendMsg() {
+            this.getCurrentTime();
             // SALVO AL PRESS INVIO IL V-MODEL IN UNA VARIABILE STABILE PER POTER ELIMINARE
             this.userMsgStable = this.userMsg
             // SVUOTO IL V-MODEL INPUT UTENTE
@@ -267,11 +273,12 @@ createApp({
             let selectedContact = this.contacts[this.clickedContact].messages;
             console.log(selectedContact);
             selectedContact.push({
-                date: '10/05/2023 15:45:55',
+                date: '10/01/2020' + this.time,
                 message: this.userMsgStable,
                 status: 'received'
             })
             this.LastRecivedMsgs[this.clickedContact] = this.userMsgStable;
+            // TESTO ORA LEGALE
             this.randomResponse();
         },
 
@@ -279,16 +286,28 @@ createApp({
 
         randomResponse() {
             setTimeout(() => {
+                this.getCurrentTime();
                 this.contacts[this.clickedContact].messages.push({
-                    date: '10/05/2023 15:45:55',
-                    message: 'QUALCOSA A CASO',
+                    date: `10/05/2023` + this.time,
+                    message: 'A TESTA DI CAZZO',
                     status: 'sent'
                 })
                 this.LastRecivedMsgs[this.clickedContact] = this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].message;
 
-            }, 10000);
+            }, 5000);
         },
+
         // BONUS OTTENGO L'ORA ATTUALE
+        getCurrentTime() {
+            const d = new Date();
+            let hour = d.getHours();
+            let minutes = d.getMinutes();
+            let seconds = d.getSeconds();
+            console.log(hour, minutes, seconds);
+            this.time = hour + ':' + minutes + ':' + seconds
+            console.log(this.time);
+        },
+
 
     },
     mounted() {
@@ -296,6 +315,8 @@ createApp({
         this.msgClickedContact = this.contacts[this.clickedContact].messages;
         this.separationDateMsg();
         this.lastMsgAtLoading();
+        this.getCurrentTime();
+
 
 
     }
