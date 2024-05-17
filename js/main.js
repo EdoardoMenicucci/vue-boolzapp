@@ -1,5 +1,3 @@
-//Vue app
-
 const { createApp } = Vue
 
 createApp({
@@ -173,24 +171,26 @@ createApp({
             // TENGO TRACCIA DEL CONTATTO ATTUALMENTE CLICCATO
             clickedContact: 0,
             // CREO UN ARRAY DI OGGETTI CONTENENTI MESSAGGI DATA E STATO
-            msgClickedContact: [],
+            msgUserSelected: [],
             // DIVIDO LA DATA DALL'ARRAY DI OGGETTI DI MESSAGGI
             // VARIABILE APPOGGIO ULTIMO MESSAGGIO DATA E ORA
-            lastDate: '', //STRINGA DI DATA E ORA ULTIMO MESSAGGIO RICEVUTO
+            lastDate: '', //STRINGA DATA ULTIMO MESSAGGIO RICEVUTO DALL UTENTE
             // DIVIDO CON SPLIT LA DATA (TARSFORMO LA STRINGA IN UN ARRAY DI 2 ELEMENTI)
             dateSplitted: [], //ARRAY IN POSIZIONE 0 GIORNO/ANNO; IN POSIZIONE 1 MINUTI/ORA;
+            // USO LO SLICE PER PRENDERE SOLO ORA E MINUTI
+
             //ULTIMI MESSAGGI INVIATI DAGLI UTENTI ARRAY
             LastRecivedMsgs: [],
             // TUTTE LE DATE DEI MESSAGGI DEGLI ULTIMI UTENTI
             lastDataStart: [],
-            // ORA MINUTI
-            minuteHour: '',
             // V-MODEL USER MSG (ATTENZIONE PROXY)
             userMsg: '',
             // USER MSG DA STAMPARE (CHE NON SI AGGIORNA AD OGNI CAMBIO DI CARATTERE)
             userMsgStable: '',
             // BONUS CREO IL TEMPO REALE DA INSERIRE QUANDO MANDO UN MSG
             time: '',
+            // BONUS CREO MESI ANNI E GIORNI DA INSERIRE
+            day: '',
         }
     },
     methods: {
@@ -198,7 +198,7 @@ createApp({
         clickOnContact(contatto, i, contacts) {
             // SALVO NEI DATA IL NUMERO DEL CONTATTO CLICCATO
             this.clickedContact = i
-            console.log(contatto.messages[0].date);
+            console.log(contatto);
             // TOLGO LA VISIBILITA AD OGNI CLICK SU TUTTI I CONTATTI
             for (let i = 0; i < contacts.length; i++) {
                 const element = contacts[i];
@@ -207,15 +207,16 @@ createApp({
             // SOLO IL CONTATTO CLICCATO DIVENTA VISIBLE (CLASS GREY E MESSAGGI)
             contatto.visible = true
             // SALVO IN UNA VARIABILE I MESSAGGI DEL CONTATTO CLICCATO
-            this.msgClickedContact = contatto.messages
+            this.msgUserSelected = contatto.messages
             //RICHIAMO LA FUNZIONE CHE LAVORA OGNI OGGETTO MESSAGES NELL ARRAY
-            this.separationDateMsg(contatto, i, contacts);
+            this.separationDateMsg();
+
         },
         // Separo la data dai messagi e stati solo per la sezione messaggi visibili//
-        separationDateMsg(contatto, i, contacts) {
+        separationDateMsg() {
             // PUSHO IN UN ARRAY STATI E DATA
-            for (let i = 0; i < this.msgClickedContact.length; i++) {
-                const element = this.msgClickedContact[i];
+            for (let i = 0; i < this.msgUserSelected.length; i++) {
+                const element = this.msgUserSelected[i];
                 console.log();
                 // DIVIDO LA DATA DALL' ORARIO
                 this.dateSplitted = element.date.split(' ');
@@ -223,30 +224,33 @@ createApp({
                 let secondsMinutesHours = this.dateSplitted[1].split(':')
                 //MOSTRO SOLTANTO MINUTI E ORE 
                 let minuteHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1]
-                this.minuteHour = minuteHours;
                 // console.log(minuteHours);
                 // RICAVO L'ULTIMO MESSAGGIO E L'ULTIMA DATA DA OGNI CONTATTO
                 if (element.status == 'sent') {
                     this.lastDate = minuteHours
-                    this.LastRevicedMsg = element.message
+                    this.lastRecivedMsg = element.message
                 };
 
             };
-            console.log(this.lastDate);
-            console.log(this.dateSplitted);
-            console.log(this.LastRevicedMsg);
+            // console.log(this.lastDate);
+            // console.log(this.dateSplitted);
+            // console.log(this.lastRecivedMsg);
             // this.lastMsgAtLoading();
         },
         // FUNZIONE CHE AL CARICAMENTO DELLA PAGINA CARICO TUTTE LE ORE E ULTIMI MSG RICEVUTI
         lastMsgAtLoading() {
+            // RESET
+            this.lastDataStart = [];
+            this.LastRecivedMsgs = [];
+
             // CICLO FOR PER TUTTI I CONTATTI/ UPDATE DATA E ORA E TUTTI GLI ULTIMI MESSAGGI
             for (let i = 0; i < this.contacts.length; i++) {
                 const element = this.contacts[i];
                 // console.log(element);
-                element.messages
                 // console.log(element.messages);
                 // PRENDO L'ULTIMO MESSAGGIO PER OGNI CHAT
                 let lastMessage = element.messages[(element.messages.length - 1)].message
+                // console.log('last message', lastMessage);
                 //PUSHO IN UN ARRAY NEI DATA TUTTI GLI ULTIMI MESSAGGI
                 this.LastRecivedMsgs.push(lastMessage);
                 // PRENDO L'ULTIMA DATA DI OGNI CONVERSAZIONE
@@ -259,12 +263,15 @@ createApp({
                 let dataOnlyMinutHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1];
                 // PUSHO IL DATO IN UNA VARIABILE NEI DATA DI VUEJS
                 this.lastDataStart.push(dataOnlyMinutHours)
+                // console.log('dati ultimo messaggio a sinistra', this.lastDataStart);
                 // console.log(this.lastDataStart);
             }
         },
         // INVIO DEI MESSAGGI NELLE CHAT
         sendMsg() {
-            // this.getCurrentTime();
+            this.getCurrentTime();
+            this.getCurrentDay();
+            console.log(this.getCurrentTime());
             // SALVO AL PRESS INVIO IL V-MODEL IN UNA VARIABILE STABILE PER POTER ELIMINARE
             this.userMsgStable = this.userMsg
             // SVUOTO IL V-MODEL INPUT UTENTE
@@ -274,28 +281,46 @@ createApp({
             let selectedContact = this.contacts[this.clickedContact].messages;
             console.log(selectedContact);
             selectedContact.push({
-                date: '10/01/2020 15:51:00',
+                date: this.day + ` ` + this.time,
                 message: this.userMsgStable,
                 status: 'received'
             })
-            this.LastRecivedMsgs[this.clickedContact] = this.userMsgStable;
+            // this.LastRecivedMsgs[this.clickedContact] = this.userMsgStable;
             // TESTO ORA LEGALE
             this.randomResponse();
+            this.lastMsgAtLoading();
+            console.log(this.contacts[this.clickedContact].messages);
         },
 
         // FUNZIONE RISPOSTA RANDOM
 
         randomResponse() {
             setTimeout(() => {
-                // this.getCurrentTime();
+                this.getCurrentTime();
+                this.getCurrentDay();
+                this.lastMsgAtLoading();
                 this.contacts[this.clickedContact].messages.push({
-                    date: `10/05/2023 15:51:00`,
+                    date: this.day + ` ` + this.time,
                     message: 'versione stabile',
                     status: 'sent'
                 })
                 this.LastRecivedMsgs[this.clickedContact] = this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].message;
-
-            }, 5000);
+                console.log(this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].date);
+                // this.lastDataStart[this.clickedContact] = this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].date.split(' ')[1];
+                this.contacts[this.clickedContact].online = true;
+                console.log(this.contacts[this.clickedContact]);
+                // SPLITTO LA DATA
+                let dateSplit = this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].date.split(' ')
+                //DIVIDO L'ORARIO ORA MINUTI SECONDI
+                let secondsMinutesHours = dateSplit[1].split(':');
+                //CREO UNA VARIABILE CON SOLTANTO LE ORE E I MINUTI
+                let dataOnlyMinutHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1];
+                this.lastDataStart[this.clickedContact] = dataOnlyMinutHours;
+                this.contacts[this.clickedContact].today = true;
+            }, 2000);
+            setTimeout(() => {
+                this.contacts[this.clickedContact].online = false;
+            }, 15000);
         },
 
         // BONUS OTTENGO L'ORA ATTUALE
@@ -305,18 +330,30 @@ createApp({
             let minutes = d.getMinutes();
             let seconds = d.getSeconds();
             // console.log(hour, minutes, seconds);
-            this.time = hour + ':' + minutes + ':' + seconds
-            console.log(this.time);
+            this.time = hour + ':' + minutes
+            // console.log(this.time);
         },
+
+        // BONUS OTTENGO LA GIORNATA ATTUALE
+        getCurrentDay() {
+            const d = new Date();
+            let year = d.getFullYear();
+            let month = d.getMonth();
+            let day = d.getDay()
+            this.day = day + '/' + month + '/' + year;
+        }
+
+        // BONUS GENERO UN NUMERO CASUALE IN MODO DA SIMULARE LA RISPOSTA UMANA
+
+
 
 
     },
     mounted() {
         console.log('app vue montanta correttamente')
-        this.msgClickedContact = this.contacts[this.clickedContact].messages;
+        this.msgUserSelected = this.contacts[this.clickedContact].messages;
         this.separationDateMsg();
         this.lastMsgAtLoading();
-        // this.getCurrentTime();
 
 
 

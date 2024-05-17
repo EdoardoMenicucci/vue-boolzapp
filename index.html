@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -105,7 +104,14 @@
                             <div class=" nome">
                                 {{contacts[clickedContact].name}}
                             </div>
-                            <div class="last-msg">Ultimo accesso {{dateSplitted[0]}} alle {{lastDate}}
+                            <div class="last-msg" v-if="!contacts[this.clickedContact].online">Ultimo accesso
+                                <span v-if="!contacts[this.clickedContact].today">{{dateSplitted[0]}}</span> <span
+                                    v-else="contacts[this.clickedContact].today">Oggi</span> <span
+                                    v-if="!contacts[this.clickedContact].today">alle
+                                    {{lastDate}}</span><span v-else="!contacts[this.clickedContact].today">alle
+                                    {{time}}</span>
+                            </div>
+                            <div class="last-msg" v-else="!contacts[this.clickedContact].online">ONLINE
                             </div>
                         </div>
                     </div>
@@ -121,15 +127,15 @@
                     <!-- SEZIONI MESSAGGI MANDATI -->
                     <div class="left-chat-column">
                         <!-- PRIMA V-FOR -->
-                        <template v-for="elemento , i in msgClickedContact">
+                        <template v-for="elemento , i in msgUserSelected">
                             <div class="recive position-relative" v-if="elemento.status == 'sent'">{{elemento.message}}
-                                <span class="time-bottom">{{elemento.date.split(' ')[1]}}</span>
+                                <span class="time-bottom">{{elemento.date.split(' ')[1].slice(0,5)}}</span>
                             </div>
                     </div>
                     <!-- SEZIONE MESSAGGI RICEVUTI -->
                     <div class="right-chat-column">
                         <div class="send position-relative" v-if="elemento.status == 'received'">
-                            {{elemento.message}}<span class="time-bottom">{{(elemento.date.split(' ')[1])}}</span>
+                            {{elemento.message}}<span class="time-bottom">{{elemento.date.split(' ')[1]}}</span>
                         </div>
                         </template>
                     </div>
@@ -146,18 +152,6 @@
             </div>
         </div>
     </main>
-
-
-
-
-
-
-
-
-
-
-
-
     <!--script js -->
     <script src="./js/main.js"></script>
     <!-- script BOOTSTRAP 5.3.3 -->
