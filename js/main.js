@@ -168,6 +168,21 @@ createApp({
                 }
             ],
             // -------------------------------------------------------------------//
+            //ARRAY DI RISPOSTE (SCELTE CASUALMENTE)
+            replyArray: [
+                'ciao sto bene',
+                'oggi devo andare dal parrucchiere',
+                'mi fa male la pancia, lo sai?',
+                'andiamo a fare serata?',
+                'ciao!',
+                'oggi sono impegnato vado al bar con gli amici!',
+                'ti va di andare al lago?',
+                'mi fa male la testa scusami',
+                'oggi vado dal dentista!',
+                'purtoppo sono in lutto',
+            ],
+
+            //--------------------------------------------------------------------//
             // TENGO TRACCIA DEL CONTATTO ATTUALMENTE CLICCATO
             clickedContact: 0,
             // CREO UN ARRAY DI OGGETTI CONTENENTI MESSAGGI DATA E STATO
@@ -178,7 +193,6 @@ createApp({
             // DIVIDO CON SPLIT LA DATA (TARSFORMO LA STRINGA IN UN ARRAY DI 2 ELEMENTI)
             dateSplitted: [], //ARRAY IN POSIZIONE 0 GIORNO/ANNO; IN POSIZIONE 1 MINUTI/ORA;
             // USO LO SLICE PER PRENDERE SOLO ORA E MINUTI
-
             //ULTIMI MESSAGGI INVIATI DAGLI UTENTI ARRAY
             LastRecivedMsgs: [],
             // TUTTE LE DATE DEI MESSAGGI DEGLI ULTIMI UTENTI
@@ -232,10 +246,6 @@ createApp({
                 };
 
             };
-            // console.log(this.lastDate);
-            // console.log(this.dateSplitted);
-            // console.log(this.lastRecivedMsg);
-            // this.lastMsgAtLoading();
         },
         // FUNZIONE CHE AL CARICAMENTO DELLA PAGINA CARICO TUTTE LE ORE E ULTIMI MSG RICEVUTI
         lastMsgAtLoading() {
@@ -267,6 +277,13 @@ createApp({
                 // console.log(this.lastDataStart);
             }
         },
+        // DATE SPLITTING FOR CURRENT MESSAGES
+        dateSplitting(elemento) {
+            let x = elemento.date.split(' ');
+            let y = x[1].slice(0, 5)
+            return y
+        },
+
         // INVIO DEI MESSAGGI NELLE CHAT
         sendMsg() {
             this.getCurrentTime();
@@ -301,7 +318,7 @@ createApp({
                 this.lastMsgAtLoading();
                 this.contacts[this.clickedContact].messages.push({
                     date: this.day + ` ` + this.time,
-                    message: 'versione stabile',
+                    message: this.replyArray[this.randomReplyNumb()],
                     status: 'sent'
                 })
                 this.LastRecivedMsgs[this.clickedContact] = this.contacts[this.clickedContact].messages[(this.contacts[this.clickedContact].messages.length - 1)].message;
@@ -317,10 +334,15 @@ createApp({
                 let dataOnlyMinutHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1];
                 this.lastDataStart[this.clickedContact] = dataOnlyMinutHours;
                 this.contacts[this.clickedContact].today = true;
-            }, 2000);
+            }, this.getRndInteger(2000, 20000));
             setTimeout(() => {
                 this.contacts[this.clickedContact].online = false;
-            }, 15000);
+            }, this.getRndInteger(5000, 30000));
+        },
+
+        //GENERO UN NUMERO TRA UN MIN E MAX COMPRESO TRA LA LUNGHEZZA DELL'ARRAY DELLE RISPOSTE
+        randomReplyNumb() {
+            return Math.floor(Math.random() * this.replyArray.length)
         },
 
         // BONUS OTTENGO L'ORA ATTUALE
@@ -328,7 +350,6 @@ createApp({
             const d = new Date();
             let hour = d.getHours();
             let minutes = d.getMinutes();
-            let seconds = d.getSeconds();
             // console.log(hour, minutes, seconds);
             this.time = hour + ':' + minutes
             // console.log(this.time);
@@ -341,9 +362,14 @@ createApp({
             let month = d.getMonth();
             let day = d.getDay()
             this.day = day + '/' + month + '/' + year;
-        }
+        },
 
-        // BONUS GENERO UN NUMERO CASUALE IN MODO DA SIMULARE LA RISPOSTA UMANA
+        // BONUS GENERO UN NUMERO CASUALE IN MODO DA SIMULARE IL TIMING DELLA RISPOSTA UMANA
+
+        getRndInteger(min, max) {
+            return Math.floor(Math.random() * (max - min)) + min;
+        },
+
 
 
 

@@ -129,13 +129,13 @@
                         <!-- PRIMA V-FOR -->
                         <template v-for="elemento , i in msgUserSelected">
                             <div class="recive position-relative" v-if="elemento.status == 'sent'">{{elemento.message}}
-                                <span class="time-bottom">{{elemento.date.split(' ')[1].slice(0,5)}}</span>
+                                <span class="time-bottom">{{dateSplitting(elemento)}}</span>
                             </div>
                     </div>
                     <!-- SEZIONE MESSAGGI RICEVUTI -->
                     <div class="right-chat-column">
                         <div class="send position-relative" v-if="elemento.status == 'received'">
-                            {{elemento.message}}<span class="time-bottom">{{elemento.date.split(' ')[1]}}</span>
+                            {{elemento.message}}<span class="time-bottom">{{dateSplitting(elemento)}}</span>
                         </div>
                         </template>
                     </div>
