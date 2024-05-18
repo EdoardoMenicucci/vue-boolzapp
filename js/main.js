@@ -28,7 +28,7 @@ createApp({
                     ],
                 },
                 {
-                    name: 'Fabio',
+                    name: 'Roberta',
                     avatar: './img/8.jpg',
                     visible: false,
                     messages: [
@@ -89,7 +89,7 @@ createApp({
                     ],
                 },
                 {
-                    name: 'Alessandro L.',
+                    name: 'Mario L.',
                     avatar: './img/4.jpg',
                     visible: false,
                     messages: [
@@ -128,7 +128,7 @@ createApp({
                     ],
                 },
                 {
-                    name: 'Federico',
+                    name: 'Federica',
                     avatar: './img/6.jpg',
                     visible: false,
                     messages: [
@@ -175,7 +175,7 @@ createApp({
                 'mi fa male la pancia, lo sai?',
                 'andiamo a fare serata?',
                 'ciao!',
-                'oggi sono impegnato vado al bar con gli amici!',
+                'oggi sono impegnato, vado al bar con gli amici!',
                 'ti va di andare al lago?',
                 'mi fa male la testa scusami',
                 'oggi vado dal dentista!',
@@ -205,6 +205,10 @@ createApp({
             time: '',
             // BONUS CREO MESI ANNI E GIORNI DA INSERIRE
             day: '',
+            // V-MODEL SEARCH BAR
+            userSearch: '',
+            // USER-SEARCH STABLE
+            userSearchStable: '',
         }
     },
     methods: {
@@ -370,6 +374,46 @@ createApp({
             return Math.floor(Math.random() * (max - min)) + min;
         },
 
+        // FUNZIONE PER SEARCHBAR (DEVO METTERE IN LOWERCASE I CARATTERI ALTRIMENTI NON COMBACIANO ALLA RICERCA)
+        userLowerSearch() {
+            // USO IL V-MODEL PER ASSEGNARLO AD UNA VARIABILE STABILE PER POI SVUOTARE LA SEARCH BAR
+            this.userSearchStable = this.userSearch
+            this.userSearch = ''
+            // CICLO FOR PER TOGLIERE VISIBLE TOLGO IL VISIBLE A TUTTI GLI ELEMENTI
+            for (let i = 0; i < this.contacts.length; i++) {
+                const element = this.contacts[i];
+                element.visible = false
+            }
+
+            for (let i = 0; i < this.contacts.length; i++) {
+                const element = this.contacts[i];
+                let elementName = element.name
+                // SE IL NOME INCLUDE SPAZI LO DIVIDO PER POTERLO CERCARE SOLO TRAMITE NOME
+                if (elementName.includes(' ')) {
+                    let splittedName = elementName.split(' ')
+                    elementName = splittedName[0]
+                    console.log(elementName);
+                };
+                // TRASFORMO TUTTI I NOMI IN LOWERCASE
+                const elementNameLowerCase = elementName.toLowerCase();
+                //SE IL NOME CERCATO E' COMPRESO TRA I CONTATTI LO METTO IN EVIDENZA E MOSTRO I MESSAGGI COME FOSSE CLICCATO
+                if (this.userSearchStable == elementNameLowerCase) {
+                    this.clickedContact = i
+                    element.visible = true
+                    this.msgUserSelected = element.messages
+                    console.log('sono nel aggiunta visible');
+                }
+            }
+        },
+
+        debug() {
+            console.log(this.userSearchStable);
+            console.log(this.userSearch);
+            console.log(this.clickedContact);
+            console.log();
+            console.log();
+        },
+
 
 
 
@@ -380,9 +424,6 @@ createApp({
         this.msgUserSelected = this.contacts[this.clickedContact].messages;
         this.separationDateMsg();
         this.lastMsgAtLoading();
-
-
-
     }
 },
 

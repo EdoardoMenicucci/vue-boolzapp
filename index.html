@@ -27,7 +27,7 @@
                     <!-- img user -->
                     <div class="d-flex flex-center">
                         <div class="user-image">
-                            <img src="./img/0.jpg" alt="">
+                            <img src="./img/0.jpg" alt="" @click="debug()">
                         </div>
                         <!-- nome user -->
                         <div class="ps-2 nome">
@@ -60,10 +60,10 @@
                 <div class="left-searchbar gold">
                     <div class="container-fluid pt-1">
                         <div class="input-group">
-                            <span class="input-group-text" id="basic-addon1"><i
+                            <span class="input-group-text" id="basic-addon1" @click="userLowerSearch()"><i
                                     class="fa-solid fa-magnifying-glass"></i></span>
                             <input type="text" class="form-control" placeholder="Cerca o inizia una nuova chat"
-                                aria-label="Username" aria-describedby="basic-addon1">
+                                aria-label="Username" aria-describedby="basic-addon1" v-model="userSearch">
                         </div>
                     </div>
                 </div>
