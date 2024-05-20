@@ -63,30 +63,33 @@
                             <span class="input-group-text" id="basic-addon1" @click="userLowerSearch()"><i
                                     class="fa-solid fa-magnifying-glass"></i></span>
                             <input type="text" class="form-control" placeholder="Cerca o inizia una nuova chat"
-                                aria-label="Username" aria-describedby="basic-addon1" v-model="userSearch">
+                                aria-label="Username" aria-describedby="basic-addon1" v-model="userSearch"
+                                @input="userSearchVisibility()">
                         </div>
                     </div>
                 </div>
                 <!-- SEZIONE CARD UTENTI GENERATI CON VUE JS -->
                 <div class="left-user flex-columns">
                     <!-- CARD UTENTE -->
-                    <div class="card-utente position-relative p-2 d-flex" v-for="contatto , i in contacts"
-                        @click="clickOnContact(contacts[i] , i, contacts)" :class="{ grey: contatto.visible}">
-                        <!-- IMMAGINE UTENTE -->
-                        <div class="user-image-big">
-                            <img :src="contatto.avatar" alt="">
-                        </div>
-                        <div class="flex-columns ps-2">
-                            <!-- Nome utente -->
-                            <div class="nome">{{contatto.name}}</div>
-                            <div class=" last-msg">{{LastRecivedMsgs[i]}}
+                    <template v-for="contatto , i in contacts">
+                        <div class="card-utente position-relative p-2 d-flex" v-if="contatto.visible"
+                            @click="clickOnContact(contacts[i] , i, contacts)" :class="{ grey: i == clickedContact}">
+                            <!-- IMMAGINE UTENTE -->
+                            <div class="user-image-big">
+                                <img :src="contatto.avatar" alt="">
+                            </div>
+                            <div class="flex-columns ps-2">
+                                <!-- Nome utente -->
+                                <div class="nome">{{contatto.name}}</div>
+                                <div class=" last-msg">{{LastRecivedMsgs[i]}}
+                                </div>
+                            </div>
+                            <!-- POSITION ABSOLUTE PER ORARIO -->
+                            <div class="time-msg">
+                                {{lastDataStart[i]}}
                             </div>
                         </div>
-                        <!-- POSITION ABSOLUTE PER ORARIO -->
-                        <div class="time-msg">
-                            {{lastDataStart[i]}}
-                        </div>
-                    </div>
+                    </template>
                 </div>
             </div>
 

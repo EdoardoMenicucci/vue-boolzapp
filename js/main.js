@@ -30,7 +30,7 @@ createApp({
                 {
                     name: 'Roberta',
                     avatar: './img/8.jpg',
-                    visible: false,
+                    visible: true,
                     messages: [
                         {
                             date: '20/03/2020 16:30:00',
@@ -52,7 +52,7 @@ createApp({
                 {
                     name: 'Samuele',
                     avatar: './img/2.jpg',
-                    visible: false,
+                    visible: true,
                     messages: [
                         {
                             date: '28/03/2020 10:10:40',
@@ -74,7 +74,7 @@ createApp({
                 {
                     name: 'Alessandro B.',
                     avatar: './img/3.jpg',
-                    visible: false,
+                    visible: true,
                     messages: [
                         {
                             date: '10/01/2020 15:30:55',
@@ -91,7 +91,7 @@ createApp({
                 {
                     name: 'Mario L.',
                     avatar: './img/4.jpg',
-                    visible: false,
+                    visible: true,
                     messages: [
                         {
                             date: '10/01/2020 15:30:55',
@@ -108,7 +108,7 @@ createApp({
                 {
                     name: 'Claudia',
                     avatar: './img/5.jpg',
-                    visible: false,
+                    visible: true,
                     messages: [
                         {
                             date: '10/01/2020 15:30:55',
@@ -130,7 +130,7 @@ createApp({
                 {
                     name: 'Federica',
                     avatar: './img/6.jpg',
-                    visible: false,
+                    visible: true,
                     messages: [
                         {
                             date: '10/01/2020 15:30:55',
@@ -147,7 +147,7 @@ createApp({
                 {
                     name: 'Davide',
                     avatar: './img/7.jpg',
-                    visible: false,
+                    visible: true,
                     messages: [
                         {
                             date: '10/01/2020 15:30:55',
@@ -209,6 +209,13 @@ createApp({
             userSearch: '',
             // USER-SEARCH STABLE
             userSearchStable: '',
+            // CONTATTI FILTRATI
+            filteredContacts: [], // Array per conservare i contatti filtrati
+            filteredChat: function () {
+                return this.contacts.filter((contacts) => {
+                    return contacts.name.match(this.search)
+                })
+            },
         }
     },
     methods: {
@@ -217,13 +224,6 @@ createApp({
             // SALVO NEI DATA IL NUMERO DEL CONTATTO CLICCATO
             this.clickedContact = i
             console.log(contatto);
-            // TOLGO LA VISIBILITA AD OGNI CLICK SU TUTTI I CONTATTI
-            for (let i = 0; i < contacts.length; i++) {
-                const element = contacts[i];
-                element.visible = false
-            }
-            // SOLO IL CONTATTO CLICCATO DIVENTA VISIBLE (CLASS GREY E MESSAGGI)
-            contatto.visible = true
             // SALVO IN UNA VARIABILE I MESSAGGI DEL CONTATTO CLICCATO
             this.msgUserSelected = contatto.messages
             //RICHIAMO LA FUNZIONE CHE LAVORA OGNI OGGETTO MESSAGES NELL ARRAY
@@ -290,9 +290,8 @@ createApp({
 
         // INVIO DEI MESSAGGI NELLE CHAT
         sendMsg() {
-            this.getCurrentTime();
-            this.getCurrentDay();
-            console.log(this.getCurrentTime());
+            this.getCurrentTimeDay();
+            // this.getCurrentDay();
             // SALVO AL PRESS INVIO IL V-MODEL IN UNA VARIABILE STABILE PER POTER ELIMINARE
             this.userMsgStable = this.userMsg
             // SVUOTO IL V-MODEL INPUT UTENTE
@@ -317,8 +316,8 @@ createApp({
 
         randomResponse() {
             setTimeout(() => {
-                this.getCurrentTime();
-                this.getCurrentDay();
+                this.getCurrentTimeDay();
+                // this.getCurrentDay();
                 this.lastMsgAtLoading();
                 this.contacts[this.clickedContact].messages.push({
                     date: this.day + ` ` + this.time,
@@ -348,25 +347,39 @@ createApp({
         randomReplyNumb() {
             return Math.floor(Math.random() * this.replyArray.length)
         },
-
-        // BONUS OTTENGO L'ORA ATTUALE
-        getCurrentTime() {
-            const d = new Date();
-            let hour = d.getHours();
-            let minutes = d.getMinutes();
-            // console.log(hour, minutes, seconds);
-            this.time = hour + ':' + minutes
-            // console.log(this.time);
+        // PRENDO DATA E ORE MINUTI SOLUZIONE AFFIDABILE SENZA RANZARE VIA GLI ZERI!!
+        getCurrentTimeDay() {
+            const now = new Date();
+            let oreMinuti = now.toLocaleTimeString('it-IT', { hour: '2-digit', minute: '2-digit' });
+            console.log(oreMinuti);
+            this.time = oreMinuti
+            let data = now.toLocaleDateString('it-IT', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            console.log(data);
+            this.day = data
         },
 
-        // BONUS OTTENGO LA GIORNATA ATTUALE
-        getCurrentDay() {
-            const d = new Date();
-            let year = d.getFullYear();
-            let month = d.getMonth();
-            let day = d.getDay()
-            this.day = day + '/' + month + '/' + year;
-        },
+        // IN QUESTO MODO MI RANZAVA VIA GLI ZERI QUINDI HO CERCATO UN ALTRA SOLUZIONE //
+
+        // BONUS OTTENGO L'ORA ATTUALE 1 TENTATIVO 
+        // getCurrentTime() {
+        //     const d = new Date();
+        //     let hour = d.getHours();
+        //     let minutes = d.getMinutes();
+        //     // console.log(hour, minutes, seconds);
+        //     this.time = hour + ':' + minutes
+        //     // console.log(this.time);
+        // },
+
+        // BONUS OTTENGO LA GIORNATA ATTUALE 1 TENTATIVO
+        // getCurrentDay() {
+        //     const d = new Date();
+        //     let year = d.getFullYear();
+        //     let month = d.getMonth();
+        //     let day = d.getDay()
+        //     this.day = day + '/' + month + '/' + year;
+        // },
+
+        //-----------------------------------------------------------------------------//
 
         // BONUS GENERO UN NUMERO CASUALE IN MODO DA SIMULARE IL TIMING DELLA RISPOSTA UMANA
 
@@ -375,16 +388,11 @@ createApp({
         },
 
         // FUNZIONE PER SEARCHBAR (DEVO METTERE IN LOWERCASE I CARATTERI ALTRIMENTI NON COMBACIANO ALLA RICERCA)
+        //PREMO INVIO E MI METTE NELLA CHAT SELEZIONATA BONUS-------
         userLowerSearch() {
             // USO IL V-MODEL PER ASSEGNARLO AD UNA VARIABILE STABILE PER POI SVUOTARE LA SEARCH BAR
             this.userSearchStable = this.userSearch
             this.userSearch = ''
-            // CICLO FOR PER TOGLIERE VISIBLE TOLGO IL VISIBLE A TUTTI GLI ELEMENTI
-            for (let i = 0; i < this.contacts.length; i++) {
-                const element = this.contacts[i];
-                element.visible = false
-            }
-
             for (let i = 0; i < this.contacts.length; i++) {
                 const element = this.contacts[i];
                 let elementName = element.name
@@ -399,20 +407,41 @@ createApp({
                 //SE IL NOME CERCATO E' COMPRESO TRA I CONTATTI LO METTO IN EVIDENZA E MOSTRO I MESSAGGI COME FOSSE CLICCATO
                 if (this.userSearchStable == elementNameLowerCase) {
                     this.clickedContact = i
-                    element.visible = true
                     this.msgUserSelected = element.messages
-                    console.log('sono nel aggiunta visible');
+                }
+            }
+        },
+
+        // TOLGO LA VISIBILITA AI CONATTI CHE NON CONTENGONO LE LETTERE INSERITE NELLA SEARCHBAR 4-5 MILESTONE
+        userSearchVisibility() {
+            for (let i = 0; i < this.contacts.length; i++) {
+                const contatto = this.contacts[i];
+                let elementName = contatto.name
+                // TRASFORMO TUTTI I NOMI IN LOWERCASE
+                let elementNameLowerCase = elementName.toLowerCase();
+                if (elementNameLowerCase.startsWith(this.userSearch)) {
+                    contatto.visible = true
+                } else {
+                    contatto.visible = false
                 }
             }
         },
 
         debug() {
-            console.log(this.userSearchStable);
-            console.log(this.userSearch);
-            console.log(this.clickedContact);
-            console.log();
-            console.log();
+            // console.log(this.userSearchStable);
+            // console.log(this.userSearch);
+            // console.log(this.clickedContact);
+            // console.log();
+            // console.log();
+            // this.getCurrentTimeDay()
+            // if (this.contacts[1].name.includes('Rob')) {
+            //     console.log('contiene');
+            // }
         },
+
+
+
+
 
 
 
