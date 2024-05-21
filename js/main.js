@@ -211,11 +211,6 @@ createApp({
             userSearchStable: '',
             // CONTATTI FILTRATI
             filteredContacts: [], // Array per conservare i contatti filtrati
-            filteredChat: function () {
-                return this.contacts.filter((contacts) => {
-                    return contacts.name.match(this.search)
-                })
-            },
         }
     },
     methods: {
@@ -337,6 +332,7 @@ createApp({
                 let dataOnlyMinutHours = secondsMinutesHours[0] + ':' + secondsMinutesHours[1];
                 this.lastDataStart[this.clickedContact] = dataOnlyMinutHours;
                 this.contacts[this.clickedContact].today = true;
+                this.contacts[this.clickedContact].online = true;
             }, this.getRndInteger(2000, 20000));
             setTimeout(() => {
                 this.contacts[this.clickedContact].online = false;

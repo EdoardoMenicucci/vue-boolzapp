@@ -277,8 +277,9 @@ span {
 
 /* Messaggi scritti */
 .right-chat-column {
-    width: 100%;
-    margin: 0.8rem 125%;
+    width: 45%;
+    margin: 0.8rem;
+    margin-left: 50%;
 }
 
 /* Border */

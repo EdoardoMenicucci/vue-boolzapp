@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <!-- VueJs -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
-    <!-- Importo axios get e pull-->
+    <!-- Importo axios get e pull API-->
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
@@ -128,20 +128,21 @@
                 <!-- COLONNA CHAT INVIO VERDE; RICEVUTA ROSSA -->
                 <div class="chat-column">
                     <!-- SEZIONI MESSAGGI MANDATI -->
-                    <div class="left-chat-column">
-                        <!-- PRIMA V-FOR -->
-                        <template v-for="elemento , i in msgUserSelected">
+                    <template v-for="elemento , i in msgUserSelected">
+                        <div class="left-chat-column">
+                            <!-- PRIMA V-FOR -->
                             <div class="recive position-relative" v-if="elemento.status == 'sent'">{{elemento.message}}
                                 <span class="time-bottom">{{dateSplitting(elemento)}}</span>
                             </div>
-                    </div>
-                    <!-- SEZIONE MESSAGGI RICEVUTI -->
-                    <div class="right-chat-column">
-                        <div class="send position-relative" v-if="elemento.status == 'received'">
-                            {{elemento.message}}<span class="time-bottom">{{dateSplitting(elemento)}}</span>
                         </div>
-                        </template>
-                    </div>
+                        <!-- SEZIONE MESSAGGI RICEVUTI -->
+                        <div class="right-chat-column">
+
+                            <div class="send position-relative" v-if="elemento.status == 'received'">
+                                {{elemento.message}}<span class="time-bottom">{{dateSplitting(elemento)}}</span>
+                            </div>
+                        </div>
+                    </template>
                 </div>
                 <!-- BOTTOM MSG BAR -->
                 <div class="right-writebar d-flex p-2 container-fluid align-items-center">
